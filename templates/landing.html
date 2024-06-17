@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="icon" type="image/png" href="/static/img/Logo-removebg-preview.png">
+		<title>asuka store</title>
+		<link rel="stylesheet" type="text/css" href="/static/css/style2.css">
+
+		<link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css"
+			rel="stylesheet">
+
+		<link rel="stylesheet"
+			href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+			rel="stylesheet">
+            <script
+            src="{{ url_for('static', filename='plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+        <!-- Toastr -->
+        <script
+            src="{{ url_for('static', filename='plugins/toastr/toastr.min.js') }}"></script>
+
+	</head>
+	<body>
+
+		<!----header section design---->
+		<header>
+			<a href="#" class="logo"><img src="/static/img/Logo-removebg-preview.png" alt="Logo" width="20" height="20"></a>
+
+			<ul class="navbar">
+				<li><a href="/" class="active">Inicio</a></li>
+				<li><a href="/shop">Productos</a></li>
+				{% if 'cliente_id' in session %}
+				<li><a href="{{ url_for('logout') }}">Cerrar sesión</a></li>
+				{% endif %}
+
+			</ul>
+
+			<div class="icons">
+				{% if 'cliente_foto' in session %}
+				<a href class="foto"><img
+					src="/static/img/imagenes/{{session['cliente_foto']}}" class="foto" alt></a>
+				{% else %}
+				<a href="/login"><i class="ri-user-line"></i></a>
+				{% endif %}
+
+				<a href="/card"><i class="ri-shopping-cart-line"></i></a>
+				<div class="bx bx-menu" id="menu-icon"></div>
+			</div>
+		</header>
+
+		{% block mains %}
+		<!-- Contenido específico de la página -->
+		{% endblock %}
+
+		<section class="contact">
+			<div class="main-contact">
+				<div class="contact-content">
+					<h5>Navegacion</h5>
+					<ul>
+						<li><a href="/">Inicio</a></li>
+					
+						<li><a href="/producto">Productos</a></li>
+					</ul>
+				</div>
+
+				<div class="contact-content">
+					<h5>Redes sociales</h5>
+					<ul>
+						<li><a href="https://www.instagram.com" target="_blank">Instragram</a></li>
+						<li><a href="https://www.facebook.com" target="_blank">Facebook</a></li>
+						<li><a href>Whatsapp</a></li>
+
+					</ul>
+
+				</div>
+
+				<div class="contact-content">
+					<h5>Politicas y privacidad</h5>
+					<ul>
+						<li><a href="#">Politicas y privacidad</a></li>
+						<li><a href="#">Termino y condiciones</a></li>
+						<li><a href="#">Cokies</a></li>
+
+					</ul>
+
+				</div>
+
+			</div>
+		</section>
+ <!-- Content Wrapper. Contains page content -->
+ <div class="content-wrapper">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <script>
+          Swal.fire(
+            '{{ category }}!',
+            '{{ message }}',
+            '{{ category.lower() }}'
+          );
+        </script>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+    {% block main %}
+    <!-- Contenido específico de la página -->
+    {% endblock %}
+</div>
+		<div class="end-text">
+			<p>© 2023 Todos los derechos reservados</p>
+		</div>
+
+		<script src="https://unpkg.com/scrollreveal"></script>
+        <script
+        src="{{ url_for('static', filename='plugins/jquery/jquery.min.js') }}"></script>
+		<!---custom js link--->
+		<script type="text/javascript"
+			src="{{url_for('static', filename= 'js/script.js')}}"></script>
+            <script
+            src="{{ url_for('static', filename='plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+        <script
+            src="{{ url_for('static', filename='plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+        <!-- Toastr -->
+        <script
+            src="{{ url_for('static', filename='plugins/toastr/toastr.min.js') }}"></script>
+	</body>
+</html>

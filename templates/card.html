@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/static/img/2.png">
+    <title> </title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.6/flowbite.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.6/flowbite.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <!----css3---->
+    <link rel="stylesheet" href="/static/css/custom.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/style2.css">
+    <style>
+        * {
+            padding: 5;
+            margin: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            text-decoration: none;
+            list-style: none;
+        }
+
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #0f172a;
+            --main-color: #6b7280;
+            --other-color: #334155;
+            --big-font: 4.3rem;
+            --h2-font: 2.2rem;
+            --p-font: 1rem;
+        }
+
+        body {
+            color: var(--text-color);
+            background: var(--bg-color);
+        }
+
+        header {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: transparent;
+            padding: 17px 11%;
+            border-bottom: 1px solid #f7f9fb;
+            transition: all .45s ease;
+        }
+
+        .logo img {
+            width: 15%;
+            height: 15%;
+        }
+
+        .navbar {
+            display: flex;
+        }
+
+        .navbar a {
+            font-size: var(--p-font);
+            color: var(--other-color);
+            font-weight: 400;
+            padding: 10px 30px;
+            margin: 0 10px;
+            background: transparent;
+            border-radius: 30px;
+            transition: all .45s ease;
+        }
+
+        .navbar a:hover {
+            background: #f7f9fb;
+        }
+
+        .navbar a.active {
+            background: #f7f9fb;
+        }
+
+        header.sticky {
+            background: transparent;
+            padding: 14px 11%;
+        }
+    </style>
+</head>
+
+<body  class="bg-white text-gray-900">
+    <header class="fixed w-full bg-white shadow-md z-50">
+        <div class="container mx-auto flex justify-between items-center p-4">
+            <ul class="flex space-x-4">
+                <li><a href="/shop" class="text-gray-700 hover:bg-gray-100 px-4 py-2 rounded">Seguir comprando</a></li>
+            </ul>
+            <div class="flex items-center space-x-4">
+                {% if 'cliente_foto' in session %}
+                <a href="#"><img src="/static/img/imagenes/{{session['cliente_foto']}}" class="w-10 h-10 rounded-full" alt="Profile Picture"></a>
+                {% else %}
+                <a href="/login" class="text-gray-700 hover:text-gray-900"><i class="ri-user-line text-2xl"></i></a>
+                {% endif %}
+                <a href="/card" class="text-gray-700 hover:text-gray-900"><i class="ri-shopping-cart-line text-2xl"></i></a>
+            </div>
+        </div>
+    </header>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="container mx-auto mt-20 p-4">
+        {% if 'cliente_foto' in session %}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+                <h1 class="text-3xl font-bold mb-2">Orden de pedido</h1>
+                <h5 class="text-lg mb-1">Hola,</h5>
+                <p class="text-lg text-gray-700" id="cliente">{{ session["cliente_nombre"] }}</p>
+            </div>
+            <div class="text-right">
+                <h5 class="text-lg">Fecha: <span id="fecha"></span></h5>
+            </div>
+        </div>
+        <script>
+            var fechaActual = new Date();
+            var dia = fechaActual.getDate();
+            var mes = fechaActual.getMonth() + 1; // Los meses en JavaScript van de 0 a 11
+            var anio = fechaActual.getFullYear();
+            var fechaActualString = dia + "/" + mes + "/" + anio;
+            document.getElementById("fecha").textContent = fechaActualString;
+        </script>
+        <form action="/guardar_venta" method="POST" id="formulario-venta">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="correo" class="block text-gray-700">Correo electrónico:</label>
+                    <input id="correo" name="correo" value="{{ session['cliente_correo'] }}" disabled class="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label for="tipo-entrega" class="block text-gray-700">Tipo de entrega:</label>
+                    <select id="tipo-entrega" name="tipo-entrega" class="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="metro">Metro</option>
+                        <option value="grandana">Grandana</option>
+                        <option value="masaya">Masaya</option>
+                        <option value="uca">UCA</option>
+                        <option value="uni">UNI</option>
+                        <option value="envio">Envío por correo</option>
+                    </select>
+                </div>
+                <input type="hidden" name="estado" value="1">
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                <div>
+                    <label for="telefono" class="block text-gray-700">Teléfono:</label>
+                    <input id="telefono" name="telefono" value="{{ session['cliente_celular'] }}" disabled class="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                {% if carrito %}
+                <div class="flex items-end justify-end">
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Terminar pedido</button>
+                </div>
+                {% endif %}
+            </div>
+        </form>
+        {% else %}
+        <a href="/login" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Iniciar sesion</a>
+        {% endif %}
+       
+        <table class="table-auto w-full mt-4">
+            <thead>
+                <tr>
+                    <th class="px-4 py-2 border-b">Producto</th>
+                    <th class="px-4 py-2 border-b">Foto</th>
+                    <th class="px-4 py-2 border-b">Cantidad</th>
+                    <th class="px-4 py-2 border-b">Precio</th>
+                    <th class="px-4 py-2 border-b">Sub total</th>
+                    <th class="px-4 py-2 border-b">Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in carrito %}
+                <tr>
+                    <td class="px-4 py-2 border-b">{{ item.nombre }}</td>
+                    <td class="px-4 py-2 border-b"><img src="/static/img/imagenes/{{ item.logo }}" alt="Product Image" class="w-12 h-12"></td>
+                    <td class="px-4 py-2 border-b">{{ item.cantidad }}</td>
+                    <td class="px-4 py-2 border-b">{{ item.precio }}</td>
+                    <td class="px-4 py-2 border-b"><span class="subtotal" id="subtotal{{ loop.index }}">{{ item.precio * item.cantidad }}</span></td>
+                    <td class="px-4 py-2 border-b"><a href="/eliminar/{{ item.id }}" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Eliminar</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="grid grid-cols-1 md:grid-cols-2 mt-4">
+            <div class="text-left">
+                <h5 class="text-xl font-semibold">Total:</h5>
+            </div>
+            <div class="text-right">
+                <h2 id="total" class="text-2xl font-bold">c$ {{total_carrito}}</h2>
+            </div>
+        </div>
+    </div>
+    <section class="contact">
+        <div class="main-contact">
+            <div class="contact-content">
+                <h5>Navegacion</h5>
+                <ul>
+                    <li><a href="/">Inicio</a></li>
+                    <li><a href="/acerca">Acerca de</a></li>
+                    <li><a href="/producto">Productos</a></li>
+                </ul>
+            </div>
+
+            <div class="contact-content">
+                <h5>Redes sociales</h5>
+                <ul>
+                    <li><a href="https://www.instagram.com/luxx.art.cfts/" target="_blank">Instagram</a></li>
+                    <li><a href="https://www.facebook.com/gomez.1624" target="_blank">Facebook</a></li>
+                    <li><a href="https://wa.me/telefono">Whatsapp</a></li>
+                </ul>
+            </div>
+
+            <div class="contact-content">
+                <h5>Políticas y privacidad</h5>
+                <ul>
+                    <li><a href="#">Políticas y privacidad</a></li>
+                    <li><a href="#">Términos y condiciones</a></li>
+                    <li><a href="#">Cookies</a></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <div class="end-text">
+        <p>© 2023 All Rights Reserved by Luxx</p>
+    </div>
+
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</body>
+
+</html>
